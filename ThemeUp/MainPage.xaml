@@ -75,10 +75,22 @@
                     <TextBlock Text="themes that you recently listened.." Foreground="Orange"/>
                     <TextBlock Text="Add to view" Foreground="Orange" TextWrapping="Wrap"/>
                 </StackPanel>
-                    <StackPanel Visibility="Collapsed"  x:Name="currentStack">
+                    <StackPanel  x:Name="currentStack" Height="324">
 
-                    <Image     x:Name="currenImg" Height="231" Margin="0,0,150,0"/>
-                    <TextBlock x:Name="currentTxtBox" Text="{Binding currentname}" TextWrapping="Wrap" FontSize="40" Margin="0,20,0,0"/>
+                    <!--<Image     x:Name="currenImg" Height="231" Margin="0,0,150,0"/>-->
+
+                        <Canvas x:Name="viewfinderCanvas" Width="380" Height="337" 
+                   HorizontalAlignment="Left" >
+
+                            <!--Camera viewfinder -->
+                            <Canvas.Background>
+                                <ImageBrush x:Name="currentmImg"/> 
+                            </Canvas.Background>
+ 
+
+                        </Canvas>
+
+                        <TextBlock x:Name="currentTxtBox" Text="{Binding currentname}" TextWrapping="Wrap" FontSize="40" Margin="0,20,0,0"/>
                     <TextBlock Text="Play" Tap="currentthemeclick" Margin="185,0,52,0"/>
                 </StackPanel>
                 </StackPanel>

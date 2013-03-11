@@ -31,7 +31,7 @@ using Microsoft.Devices;
 using System.Windows.Media.Imaging;
 using Microsoft.Phone.Tasks;
 using Microsoft.Phone.Shell;
-
+using MessageBoxService;
 
 //USE ExistToVisibilityConverter
 
@@ -71,16 +71,41 @@ namespace ThemeUp
 
             
         }
+        void photoCaptureOrSelectionCompleted(object sender, PhotoResult e)
+        {
+            if (e.TaskResult == TaskResult.OK)
+            {
+                ShowShareMediaTask(e.OriginalFileName);
+            }
+            else { MessageBox.Show("something has gone awry :("); }
+
+        }
+
+         
+        void ShowShareMediaTask(string path)
+        {
+            ShareMediaTask shareMediaTask = new ShareMediaTask();
+            MessageBox.Show(path);
+
+            currentmImg.ImageSource = new BitmapImage(new Uri(path, UriKind.Relative));
+
+
+            //shareMediaTask.FilePath = path;
+            //shareMediaTask.Show();
+        }
+         
 
         public CameraCaptureTask cameraCaptureTask = new CameraCaptureTask();
+        public PhotoChooserTask photochooserTask = new PhotoChooserTask();
            
         public MainPage()
         {
 
             InitializeComponent();
 
-           
-            cameraCaptureTask.Completed += cameraCaptureTask_Completed;
+
+            cameraCaptureTask.Completed += photoCaptureOrSelectionCompleted;
+            photochooserTask.Completed += photoCaptureOrSelectionCompleted;
 
            // currenImg.Source = new BitmapImage(new Uri("themePH.jpg",UriKind.Relative));
             
@@ -141,22 +166,9 @@ namespace ThemeUp
 
         }
 
-        private void cameraCaptureTask_Completed(object sender, PhotoResult e)
-        {
-            if(e.TaskResult == TaskResult.OK)
-           {
-               ShowShareMediaTask(e.OriginalFileName);
-           }
-       }
+        
+        
 
-
-       void ShowShareMediaTask(string path)
-       {
-           ShareMediaTask shareMediaTask = new ShareMediaTask();
-           shareMediaTask.FilePath = path;
-           shareMediaTask.Show();
-       }
-         
 
 
             void client_OpenReadCompleted(object sender, OpenReadCompletedEventArgs e)
@@ -177,7 +189,7 @@ namespace ThemeUp
                     BitmapImage image = new BitmapImage();
                     image.SetSource(stream);
 
-                    currenImg.Source = image;
+                    //currenImg.Source = image;
                 }
             }
          
@@ -216,7 +228,7 @@ namespace ThemeUp
 
                     Uri uri = new Uri(d.image, UriKind.Absolute);
                     ImageSource imgSource = new BitmapImage(uri);
-                    currenImg.Source = imgSource;
+                    //currenImg.Source = imgSource;
 
                     MessageBox.Show("less than 10");
                 }
@@ -300,23 +312,7 @@ namespace ThemeUp
 
         }
 
-        private void photoCaptureOrSelectionCompleted(object sender, PhotoResult e)
-        { 
-            if (e.TaskResult == TaskResult.OK)
-            {
-
-                //MessageBox.Show(e.ChosenPhoto.Length.ToString());  //Code to display the photo on the page in an image control named myImage. 
-
-
-             }
-
-
-            else
-            {
-                MessageBox.Show("something has gone awry.");
-            }
-        }
-
+         
         private void about_click(object sender, EventArgs e)
         {
             NavigationService.Navigate(new Uri("/About.xaml", UriKind.Relative));
